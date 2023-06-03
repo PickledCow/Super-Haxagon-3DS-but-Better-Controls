@@ -76,7 +76,7 @@ namespace SuperHaxagon {
 		const auto hit = _level->collision(cursorDistance, dilation);
 
 		// Keys
-		if(pressed.back || hit == Movement::DEAD) {
+		if(hit == Movement::DEAD) {
 			if (&_factory != &_selected &&
 			    _factory.getCreator() == "REDHAT" && 
 			    (_factory.getName() == "VOID" || _factory.getName() == "NULL") &&
@@ -110,12 +110,34 @@ namespace SuperHaxagon {
 			return std::make_unique<Transition>(_game, std::move(_level), _selected, _score);
 		}
 
+
 		// Process movement
-		if (pressed.left && hit != Movement::CANNOT_MOVE_LEFT) {
+		// Now with null-cancelling for snappier movement
+
+		//bool left_desired = ((pressed.game_left && (!pressed.game_right || !_right_priority)) || (pressed.game_left && !_left_held_prev)) && !(pressed.game_right && !_right_held_prev);
+		//bool right_desired = ((pressed.game_right && (!pressed.game_left || _right_priority)) || (pressed.game_right && !_right_held_prev)) && !(pressed.game_left && !_left_held_prev);
+		
+		if (pressed.game_left && !_left_held_prev) {
+			_right_priority = false;
+		} else if (pressed.game_right && !_right_held_prev) {
+			_right_priority = true;
+		}
+
+		bool left_desired = (pressed.game_left && !(_right_priority && pressed.game_right));
+		bool right_desired = (pressed.game_right && !(!_right_priority && pressed.game_left));
+
+
+		if (left_desired && hit != Movement::CANNOT_MOVE_LEFT) {
+			//_right_priority = false;
 			_level->left(dilation);
-		} else if (pressed.right && hit != Movement::CANNOT_MOVE_RIGHT) {
+		} else if (right_desired && hit != Movement::CANNOT_MOVE_RIGHT) {
+			//_right_priority = true;
 			_level->right(dilation);
 		}
+		// Update last pressed
+		_left_held_prev = pressed.game_left;
+		_right_held_prev = pressed.game_right;
+
 
 		// Make sure the cursor doesn't extend too far
 		_level->clamp();

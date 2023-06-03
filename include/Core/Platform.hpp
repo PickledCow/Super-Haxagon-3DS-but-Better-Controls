@@ -26,6 +26,9 @@ namespace SuperHaxagon {
 		bool quit : 1;
 		bool left : 1;
 		bool right : 1;
+		bool game_left : 1;
+		bool game_right : 1;
+		bool actual_select : 1;
 	};
 
 	enum class Supports {

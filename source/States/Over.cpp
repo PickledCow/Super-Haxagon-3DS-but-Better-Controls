@@ -65,7 +65,7 @@ namespace SuperHaxagon {
 
 		if(_frames >= FRAMES_PER_GAME_OVER) {
 			_level->clearPatterns();
-			if (press.select) {
+			if (press.game_left || press.game_right) {
 				// If the level we are playing is not the same as the index, we need to load
 				// the original music
 				if (_selected.getMusic() != _level->getLevelFactory().getMusic()) {
@@ -76,7 +76,7 @@ namespace SuperHaxagon {
 				return std::make_unique<Play>(_game, _selected, _selected, 0.0f);
 			}
 
-			if (press.back) {
+			if (press.actual_select) {
 				return std::make_unique<Menu>(_game, _selected);
 			}
 		}

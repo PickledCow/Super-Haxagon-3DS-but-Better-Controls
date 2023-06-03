@@ -39,6 +39,10 @@ namespace SuperHaxagon {
 		float _score = 0;
 		float _skewFrame = 0.0;
 		float _skewDirection = 1.0;
+
+		bool _left_held_prev = false;
+		bool _right_held_prev = false;
+		bool _right_priority = false;
 	};
 }
 

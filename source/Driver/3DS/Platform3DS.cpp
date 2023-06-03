@@ -18,7 +18,6 @@ namespace SuperHaxagon {
 	Platform3DS::Platform3DS(const Dbg dbg) : Platform(dbg) {
 		romfsInit();
 		gfxInitDefault();
-
 		// Metadata to gather from CFGU
 		std::string country;
 		u8 consoleModel = 0;
@@ -170,8 +169,11 @@ namespace SuperHaxagon {
 		buttons.select = (input & KEY_A) > 0;
 		buttons.back = (input & KEY_B) > 0;
 		buttons.quit = (input & KEY_START) > 0;
-		buttons.left = (input & (KEY_L | KEY_ZL | KEY_CSTICK_LEFT | KEY_CPAD_LEFT | KEY_DLEFT | KEY_Y)) > 0;
-		buttons.right = (input & (KEY_R | KEY_ZR | KEY_CSTICK_RIGHT | KEY_CPAD_RIGHT | KEY_DRIGHT | KEY_X)) > 0;
+		buttons.left = (input & (KEY_L | KEY_ZL | KEY_CSTICK_LEFT | KEY_CPAD_LEFT | KEY_DLEFT)) > 0;
+		buttons.right = (input & (KEY_R | KEY_ZR | KEY_CSTICK_RIGHT | KEY_CPAD_RIGHT | KEY_DRIGHT)) > 0;
+		buttons.game_left = (input & (KEY_L | KEY_ZL | KEY_CSTICK_LEFT | KEY_CPAD_LEFT | KEY_DLEFT | KEY_DRIGHT | KEY_DUP | KEY_DDOWN)) > 0;
+		buttons.game_right = (input & (KEY_R | KEY_ZR | KEY_CSTICK_RIGHT | KEY_CPAD_RIGHT | KEY_A | KEY_B | KEY_Y | KEY_X)) > 0;
+		buttons.actual_select = (input & KEY_SELECT) > 0;
 		return buttons;
 	}
 
